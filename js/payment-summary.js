@@ -1,31 +1,35 @@
 import { products } from "../data/products.js";
 import { cart } from "./cart.js";
 import { calculatePrice } from "../utils/util.js";
-import { deliveryPrice } from "./order-summary.js";
-export function renderPaymentSummaryHTML() {
-  console.log(deliveryPrice);
+
+export function renderPaymentSummaryHTML(deliveryPrice) {
   let html = "";
   let cartMatchingItem;
   let orderPrice = 0;
-  let shippingHandling = ``;
+  let shippingHandling = 0;
   let beforeTax = ``;
   let estimatedTax = ``;
   let orderTotal = ``;
+  let quantity = 0;
   cart.forEach((cartItem) => {
     products.forEach((productItem) => {
       if (productItem.id === cartItem.productId) {
         cartMatchingItem = productItem;
+
+        quantity += cartItem.quantity;
         orderPrice += Number(
           calculatePrice(cartMatchingItem) * cartItem.quantity
         );
-        shippingHandling += deliveryPrice.deliveryPrice;
+        if (deliveryPrice) {
+          shippingHandling += Number(deliveryPrice.deliveryPrice);
+        }
       }
     });
   });
   html += ` <div class="payment-summary-title">Order Summary</div>
 
           <div class="payment-summary-row">
-            <div>Items (3):</div>
+            <div>Items (${quantity}):</div>
             <div class="payment-summary-money">$${orderPrice}</div>
           </div>
 
