@@ -1,7 +1,6 @@
 import { products } from "../data/products.js";
-import { cart, removeFromCart } from "./cart.js";
+import { cart, saveToStorage, removeFromCart } from "./cart.js";
 import { calculatePrice } from "../utils/util.js";
-import { renderPaymentSummaryHTML } from "./payment-summary.js";
 
 export function renderOrderSummaryHTML() {
   let html = ``;
@@ -17,7 +16,9 @@ export function renderOrderSummaryHTML() {
 
     quantitySummary += Number(cartItem.quantity);
     document.querySelector(".order-summary").innerHTML =
-      html += `<div class="cart-item-container">
+      html += `<div class="cart-item-container cart-item-container-${
+        cartMatchingItem.id
+      }">
               <div class="delivery-date">Delivery date: Tuesday, June 2900</div>
   
               <div class="cart-item-details-grid">
@@ -41,10 +42,19 @@ export function renderOrderSummaryHTML() {
                     data-update-link="${cartMatchingItem.id}">
                       Update
                     </span>
+                    
+                    <input class="quantity-link save-quantity-input-${
+                      cartMatchingItem.id
+                    }" data-input-value="${cartMatchingItem.id}">
+
+                    <span class="save-quantity-link  link-primary" data-input-value="${
+                      cartMatchingItem.id
+                    }">Save</span>
                     <span class="delete-quantity-link link-primary" 
                     data-delete-link="${cartMatchingItem.id}">
                       Delete
                     </span>
+                    
                   </div>
                 </div>
   
@@ -97,13 +107,6 @@ export function renderOrderSummaryHTML() {
     ".return-to-home-link"
   ).innerHTML = ` ${quantitySummary} items`;
 
-  // document.querySelectorAll(".delivery-option-input").forEach((price) => {
-  //   price.addEventListener("click", () => {
-  //     const deliveryPrice = price.dataset || "";
-  //     console.log(cart);
-  //   });
-  // });
-
   document.querySelectorAll(".delete-quantity-link").forEach((link) => {
     link.addEventListener("click", () => {
       const deletelinkId = link.dataset;
@@ -116,6 +119,38 @@ export function renderOrderSummaryHTML() {
     link.addEventListener("click", () => {
       const updatelinkId = link.dataset;
       console.log(updatelinkId.updateLink);
+      const updateEle = document.querySelector(
+        `.cart-item-container-${updatelinkId.updateLink}`
+      );
+      updateEle.classList.add("is-eding-quantity");
     });
+  });
+  document.querySelectorAll(".save-quantity-link").forEach((button) => {
+    button.addEventListener("click", () => {
+      let updateQuantity = 0;
+      const inputValue = button.dataset;
+      let newQuantity = Number(
+        document.querySelector(`.save-quantity-input-${inputValue.inputValue}`)
+          .value
+      );
+      if (newQuantity >= 0 && newQuantity < 1000) {
+        updateQuantity = newQuantity;
+        console.log(updateQuantity);
+        cart.forEach((cartItem) => {
+          if (inputValue.inputValue === cartItem.productId) {
+            cartItem.quantity += updateQuantity;
+          }
+          saveToStorage();
+          renderOrderSummaryHTML();
+        });
+        const saveEle = document.querySelector(".cart-item-container");
+        saveEle.classList.remove("is-eding-quantity");
+      } else {
+        alert("Not a valid quantity");
+      }
+    });
+  });
+  document.querySelectorAll(".save-quantity-input").forEach((input) => {
+    input.addEventListener("keydown", () => {});
   });
 }
