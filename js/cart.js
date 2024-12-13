@@ -28,9 +28,9 @@ export function addToCart(productId) {
     cart.push({
       productId,
       quantity,
+      deliveryOptionId: 1,
     });
   }
-  console.log(cart);
 
   document.querySelector(".cart-quantity").innerHTML = saveToStorage();
 }
@@ -43,7 +43,7 @@ export function removeFromCart(deletelinkId) {
     }
   });
   cart = newCart;
-
+  console.log(cart);
   saveToStorage();
 }
 
