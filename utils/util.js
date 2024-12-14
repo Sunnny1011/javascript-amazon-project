@@ -1,4 +1,7 @@
 export function calculatePrice(cartMatchingItem) {
-  return (cartMatchingItem.priceCents / 100).toFixed(2);
+  let calculateResult;
+
+  calculateResult = Number((cartMatchingItem.priceCents / 100).toFixed(2));
+  return calculateResult;
 }
 export default calculatePrice;

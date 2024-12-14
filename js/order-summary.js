@@ -1,9 +1,15 @@
 import { products } from "../data/products.js";
-import { cart, saveToStorage, removeFromCart } from "./cart.js";
+import {
+  cart,
+  saveToStorage,
+  removeFromCart,
+  updateDeliveryOption,
+} from "./cart.js";
 import calculatePrice from "../utils/util.js";
 import { deliveryOption } from "./delivery-option.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-console.log(cart);
+import { renderPaymentSummaryHTML } from "./payment-summary.js";
+export let paymentItem = {};
 export function renderOrderSummaryHTML() {
   let html = ``;
   let quantitySummary = 0;
@@ -17,13 +23,14 @@ export function renderOrderSummaryHTML() {
         }
       });
       let deliveryOptionItem;
-      const deliveryOptionId = cartItem.deliveryOptionId;
+      const deliveryOptionId = Number(cartItem.deliveryOptionId);
       deliveryOption.forEach((optionItem) => {
         if (optionItem.deliveryOptionId === deliveryOptionId) {
           deliveryOptionItem = optionItem;
         }
       });
       const time = dayjs();
+      paymentItem = deliveryOptionItem;
       const deliveryTime = time.add(deliveryOptionItem.deliveryDays, "days");
       const deliveryTimeString = deliveryTime.format("dddd, MMMM D");
       quantitySummary += Number(cartItem.quantity);
@@ -76,13 +83,16 @@ export function renderOrderSummaryHTML() {
                 </div></div>
               </div>`;
     });
+  } else {
+    document.querySelector(".order-summary").innerHTML = "";
+    renderPaymentSummaryHTML();
   }
 
   function renderDiliveryOptionHTML(cartMatchingItem, cartItem) {
     let html = "";
     deliveryOption.forEach((optionItem) => {
       const isChecked =
-        optionItem.deliveryOptionId === cartItem.deliveryOptionId;
+        optionItem.deliveryOptionId === Number(cartItem.deliveryOptionId);
       const time = dayjs();
       const deliveryTime = time.add(optionItem.deliveryDays, "days");
       const deliveryTimeString = deliveryTime.format("dddd, MMMM D");
@@ -92,7 +102,9 @@ export function renderOrderSummaryHTML() {
                     <input
                       type="radio"
                    ${isChecked ? "checked " : ""}
-                      class="delivery-option-input"
+                      class="delivery-option-input-button"
+                      data-product-id ="${cartMatchingItem.id}"
+                      data-delivery-option-id="${optionItem.deliveryOptionId}"
                       name="delivery-option-${cartMatchingItem.id}"
                     />
                     <div>
@@ -112,13 +124,13 @@ export function renderOrderSummaryHTML() {
       const deletelinkId = link.dataset;
       removeFromCart(deletelinkId);
       renderOrderSummaryHTML();
+      renderPaymentSummaryHTML();
     });
   });
 
   document.querySelectorAll(".update-quantity-link").forEach((link) => {
     link.addEventListener("click", () => {
       const updatelinkId = link.dataset;
-      console.log(updatelinkId.updateLink);
       const updateEle = document.querySelector(
         `.cart-item-container-${updatelinkId.updateLink}`
       );
@@ -141,6 +153,7 @@ export function renderOrderSummaryHTML() {
           }
           saveToStorage();
           renderOrderSummaryHTML();
+          renderPaymentSummaryHTML();
         });
         const saveEle = document.querySelector(".cart-item-container");
         saveEle.classList.remove("is-eding-quantity");
@@ -151,7 +164,6 @@ export function renderOrderSummaryHTML() {
   });
   document.querySelectorAll(".save-quantity-input").forEach((button) => {
     button.addEventListener("keydown", (event) => {
-      console.log(event.key);
       if (event.key === "Enter") {
         let updateQuantity = 0;
         const inputValue = button.dataset;
@@ -162,13 +174,13 @@ export function renderOrderSummaryHTML() {
         );
         if (newQuantity >= 0 && newQuantity < 1000) {
           updateQuantity = newQuantity;
-          console.log(updateQuantity);
           cart.forEach((cartItem) => {
             if (inputValue.inputValue === cartItem.productId) {
               cartItem.quantity += updateQuantity;
             }
             saveToStorage();
             renderOrderSummaryHTML();
+            renderPaymentSummaryHTML();
           });
           const saveEle = document.querySelector(".cart-item-container");
           saveEle.classList.remove("is-eding-quantity");
@@ -178,4 +190,14 @@ export function renderOrderSummaryHTML() {
       }
     });
   });
+  document
+    .querySelectorAll(".delivery-option-input-button")
+    .forEach((element) => {
+      element.addEventListener("click", () => {
+        const { productId, deliveryOptionId } = element.dataset;
+        updateDeliveryOption(productId, deliveryOptionId);
+        renderOrderSummaryHTML();
+        renderPaymentSummaryHTML();
+      });
+    });
 }

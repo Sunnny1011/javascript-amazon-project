@@ -61,13 +61,18 @@ function generateHTML() {
   document.querySelector(".products-grid").innerHTML = html;
   document.querySelector(".cart-quantity").innerHTML = cartQuantity;
 }
-
+const addedMessageTimeouts = {};
 function addAddClass(productId) {
+  const previousTimeoutId = addedMessageTimeouts[productId];
+  if (previousTimeoutId) {
+    clearTimeout(previousTimeoutId);
+  }
   const cssEle = document.querySelector(`.added-to-cart-${productId}`);
-  cssEle.classList.add("added-to-cart-come-on");
-  // const timeoutId = setTimeout(() => {
-  //   cssEle.classList.remove("added-to-cart-come-on");
-  // }, 2000);
+  cssEle.classList.add(`added-to-cart-come-on`);
+  const timeoutId = setTimeout(() => {
+    cssEle.classList.remove(`added-to-cart-come-on`);
+  }, 2000);
+  addedMessageTimeouts[productId] = timeoutId;
 }
 
 document.querySelectorAll(".add-to-cart-button").forEach((button) => {
