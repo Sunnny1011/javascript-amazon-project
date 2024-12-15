@@ -6,10 +6,9 @@ import {
   updateDeliveryOption,
 } from "./cart.js";
 import calculatePrice from "../utils/util.js";
-import { deliveryOption } from "./delivery-option.js";
+import { calculateDeliveryDate, deliveryOption } from "./delivery-option.js";
 import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { renderPaymentSummaryHTML } from "./payment-summary.js";
-export let paymentItem = {};
 export function renderOrderSummaryHTML() {
   let html = ``;
   let quantitySummary = 0;
@@ -17,22 +16,18 @@ export function renderOrderSummaryHTML() {
     cart.forEach((cartItem) => {
       const productId = cartItem.productId;
       let cartMatchingItem;
+      let deliveryTimeString;
       products.forEach((productItem) => {
         if (productItem.id === productId) {
           cartMatchingItem = productItem;
         }
       });
-      let deliveryOptionItem;
       const deliveryOptionId = Number(cartItem.deliveryOptionId);
       deliveryOption.forEach((optionItem) => {
         if (optionItem.deliveryOptionId === deliveryOptionId) {
-          deliveryOptionItem = optionItem;
+          deliveryTimeString = calculateDeliveryDate(optionItem);
         }
       });
-      const time = dayjs();
-      paymentItem = deliveryOptionItem;
-      const deliveryTime = time.add(deliveryOptionItem.deliveryDays, "days");
-      const deliveryTimeString = deliveryTime.format("dddd, MMMM D");
       quantitySummary += Number(cartItem.quantity);
       document.querySelector(".order-summary").innerHTML =
         html += `<div class="cart-item-container cart-item-container-${
@@ -93,9 +88,7 @@ export function renderOrderSummaryHTML() {
     deliveryOption.forEach((optionItem) => {
       const isChecked =
         optionItem.deliveryOptionId === Number(cartItem.deliveryOptionId);
-      const time = dayjs();
-      const deliveryTime = time.add(optionItem.deliveryDays, "days");
-      const deliveryTimeString = deliveryTime.format("dddd, MMMM D");
+      const deliveryTimeString = calculateDeliveryDate(optionItem);
       const deliveryPriceString =
         optionItem.priceCents === 0 ? "Free" : calculatePrice(optionItem);
       html += `<div class="delivery-option">
