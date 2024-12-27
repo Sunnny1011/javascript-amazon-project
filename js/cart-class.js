@@ -115,5 +115,3 @@ const businessCart = new Cart(
   "cart-business-class",
   "cart-business-quantity-class"
 );
-console.log(cart);
-console.log(businessCart);

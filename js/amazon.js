@@ -21,14 +21,14 @@ function generateHTML() {
             <div class="product-rating-container">
               <img
                 class="product-rating-stars"
-                src="images/ratings/rating-${item.rating.stars * 10}.png"
+                src=${item.getImageUrl()}
               />
               <div class="product-rating-count link-primary">${
                 item.rating.count
               }</div>
             </div>
   
-            <div class="product-price">$${calculatePrice(item)}</div>
+            <div class="product-price">$${item.getProductPrice()}</div>
   
             <div class="product-quantity-container">
               <select class="data-select-id-${item.id}">
@@ -43,7 +43,9 @@ function generateHTML() {
                 <option value="9">9</option>
                 <option value="10">10</option>
               </select>
+              
             </div>
+            ${item.extraInfoHtml()}
   
             <div class="product-spacer"></div>
   
