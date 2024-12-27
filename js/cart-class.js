@@ -1,16 +1,16 @@
 import { validDeliveryOption } from "./delivery-option.js";
 class Cart {
-  cartItems = undefined;
-  localStorageCartKey = undefined;
-  localStorageQuantityKey = undefined;
+  cartItems;
+  #localStorageCartKey;
+  #localStorageQuantityKey;
   constructor(localStorageCartKey, localStorageQuantityKey) {
-    this.localStorageCartKey = localStorageCartKey;
-    this.localStorageQuantityKey = localStorageQuantityKey;
-    this.loadFromStorage();
+    this.#localStorageCartKey = localStorageCartKey;
+    this.#localStorageQuantityKey = localStorageQuantityKey;
+    this.#loadFromStorage();
   }
-  loadFromStorage() {
+  #loadFromStorage() {
     this.cartItems = JSON.parse(
-      localStorage.getItem(this.localStorageCartKey)
+      localStorage.getItem(this.#localStorageCartKey)
     ) || [
       {
         productId: "83d4ca15-0f35-48f5-b7a3-1ea210004f2e",
@@ -25,7 +25,7 @@ class Cart {
     ];
   }
   cartQuantity = JSON.parse(
-    localStorage.getItem(this.localStorageQuantityKey) || 0
+    localStorage.getItem(this.#localStorageQuantityKey) || 0
   );
   saveToStorage() {
     let addTotalQuantity = 0;
