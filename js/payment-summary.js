@@ -27,6 +27,7 @@ export function renderPaymentSummaryHTML() {
         shippingHandling += calculatePrice(deliveryOptionItem);
       }
     });
+
     beforeTax = orderPrice + shippingHandling;
 
     estimatedTax = beforeTax * 0.1;

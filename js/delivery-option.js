@@ -24,3 +24,15 @@ function isWeekend(date) {
     return true;
   } else return false;
 }
+export function validDeliveryOption(deliveryOptionId) {
+  let found = false;
+
+  deliveryOption.forEach((option) => {
+    if (option.deliveryOptionId === Number(deliveryOptionId)) {
+      found = true;
+      console.log(option.deliveryOptionId, deliveryOptionId);
+    }
+  });
+
+  return found;
+}

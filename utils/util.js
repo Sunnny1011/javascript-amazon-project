@@ -1,4 +1,4 @@
 export function calculatePrice(cartMatchingItem) {
-  return (Math.round(cartMatchingItem.priceCents) / 100).toFixed(2);
+  return Number((Math.round(cartMatchingItem.priceCents) / 100).toFixed(2));
 }
 export default calculatePrice;

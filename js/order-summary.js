@@ -7,7 +7,6 @@ import {
 } from "./cart.js";
 import calculatePrice from "../utils/util.js";
 import { calculateDeliveryDate, deliveryOption } from "./delivery-option.js";
-import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
 import { renderPaymentSummaryHTML } from "./payment-summary.js";
 export function renderOrderSummaryHTML() {
   let html = ``;
@@ -62,7 +61,7 @@ export function renderOrderSummaryHTML() {
                     <span class="save-quantity-button  link-primary" data-input-value="${
                       cartMatchingItem.id
                     }">Save</span>
-                    <span class="delete-quantity-link link-primary" 
+                    <span class="delete-quantity-link link-primary"
                     data-delete-link="${cartMatchingItem.id}">
                       Delete
                     </span>
@@ -91,14 +90,19 @@ export function renderOrderSummaryHTML() {
       const deliveryTimeString = calculateDeliveryDate(optionItem);
       const deliveryPriceString =
         optionItem.priceCents === 0 ? "Free" : calculatePrice(optionItem);
-      html += `<div class="delivery-option">
+      html += `<div class="delivery-option delivery-option-${
+        cartMatchingItem.id
+      }-${optionItem.deliveryOptionId}">
                     <input
                       type="radio"
                    ${isChecked ? "checked " : ""}
-                      class="delivery-option-input-button"
+                      class="delivery-option-input-button delivery-option-input-button-${
+                        cartMatchingItem.id
+                      }-${optionItem.deliveryOptionId}"
                       data-product-id ="${cartMatchingItem.id}"
-                      data-delivery-option-id="${optionItem.deliveryOptionId}"
-                      name="delivery-option-${cartMatchingItem.id}"
+                      data-delivery-option-id="${
+                        optionItem.deliveryOptionId
+                      }"                 
                     />
                     <div>
                       <div class="delivery-option-date">${deliveryTimeString}</div>
