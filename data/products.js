@@ -537,3 +537,30 @@ export const products = [
   return new Products(productDetails);
 });
 console.log(products);
+
+// const obj1 = {
+//   id: 1,
+//   test1() {
+//     console.log(this);
+//   },
+// };
+// obj1.test1();
+
+// // const obj2 = {
+// //   a: 1,
+// //   b: this.a,
+// // };
+// // console.log(obj2);
+
+// function obj3() {
+//   console.log(this);
+// }
+
+// obj3.call("hello");
+
+// const obj4 = {
+//   method: () => {
+//     console.log(this);
+//   },
+// };
+// obj4.method.call("test");
