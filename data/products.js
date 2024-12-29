@@ -37,6 +37,18 @@ class Clothing extends Products {
     return `<a href="${this.sizeChartLink}" target="_blank">Size Link</a>`;
   }
 }
+class Appliance extends Products {
+  instructionsLink;
+  warrantyLink;
+  constructor(productDetails) {
+    super(productDetails);
+    this.instructionsLink = 1;
+    this.warrantyLink = 111;
+  }
+  extraInfoHtml() {
+    return `<a href="" target="_blank">Instructions</a><a href="" target="_blank">Warranty</a>`;
+  }
+}
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -533,8 +545,15 @@ export const products = [
 ].map((productDetails) => {
   if (productDetails.type === "clothing") {
     return new Clothing(productDetails);
+  } else if (productDetails.keywords) {
+    productDetails.keywords.forEach((element) => {
+      if (element === "appliance") {
+        return new Appliance(productDetails);
+      }
+    });
+  } else {
+    return new Products(productDetails);
   }
-  return new Products(productDetails);
 });
 console.log(products);
 
