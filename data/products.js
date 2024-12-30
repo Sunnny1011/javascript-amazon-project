@@ -42,11 +42,11 @@ class Appliance extends Products {
   warrantyLink;
   constructor(productDetails) {
     super(productDetails);
-    this.instructionsLink = 1;
-    this.warrantyLink = 111;
+    this.instructionsLink = "../images/appliance-instructions.png";
+    this.warrantyLink = "../images/appliance-warranty.png";
   }
   extraInfoHtml() {
-    return `<a href="" target="_blank">Instructions</a><a href="" target="_blank">Warranty</a>`;
+    return `<a href="${this.instructionsLink}" target="_blank">Instructions</a><a href="${this.warrantyLink}" target="_blank">Warranty</a>`;
   }
 }
 export const products = [
@@ -545,17 +545,18 @@ export const products = [
 ].map((productDetails) => {
   if (productDetails.type === "clothing") {
     return new Clothing(productDetails);
-  } else if (productDetails.keywords) {
-    productDetails.keywords.forEach((element) => {
-      if (element === "appliance") {
-        return new Appliance(productDetails);
-      }
-    });
-  } else {
-    return new Products(productDetails);
   }
+  if (productDetails.keywords) {
+    const hasappliances = productDetails.keywords.includes("appliances");
+
+    if (hasappliances) {
+      return new Appliance(productDetails);
+    }
+  }
+  return new Products(productDetails);
 });
-console.log(products);
+
+console.log("+++++++++++", products);
 
 // const obj1 = {
 //   id: 1,
