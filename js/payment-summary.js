@@ -1,5 +1,5 @@
 import { products } from "../data/products.js";
-import { cart } from "./cart.js";
+import { cartClass } from "./cart-class.js";
 import { calculatePrice } from "../utils/util.js";
 import { deliveryOption } from "./delivery-option.js";
 
@@ -13,7 +13,7 @@ export function renderPaymentSummaryHTML() {
   let estimatedTax = 0;
   let orderTotal = 0;
   let quantity = 0;
-  cart.forEach((cartItem) => {
+  cartClass.cartItems.forEach((cartItem) => {
     products.forEach((productItem) => {
       if (productItem.id === cartItem.productId) {
         cartMatchingItem = productItem;

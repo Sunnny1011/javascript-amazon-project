@@ -1,5 +1,5 @@
 import { calculatePrice } from "../utils/util.js";
-class Products {
+export class Products {
   id;
   image;
   name;
@@ -26,7 +26,7 @@ class Products {
     return ``;
   }
 }
-class Clothing extends Products {
+export class Clothing extends Products {
   sizeChartLink;
   constructor(productDetails) {
     super(productDetails);
@@ -37,7 +37,7 @@ class Clothing extends Products {
     return `<a href="${this.sizeChartLink}" target="_blank">Size Link</a>`;
   }
 }
-class Appliance extends Products {
+export class Appliance extends Products {
   instructionsLink;
   warrantyLink;
   constructor(productDetails) {

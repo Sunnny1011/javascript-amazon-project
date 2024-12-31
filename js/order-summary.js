@@ -1,18 +1,15 @@
 import { products } from "../data/products.js";
-import {
-  cart,
-  saveToStorage,
-  removeFromCart,
-  updateDeliveryOption,
-} from "./cart.js";
+import { cartClass } from "./cart-class.js";
 import calculatePrice from "../utils/util.js";
 import { calculateDeliveryDate, deliveryOption } from "./delivery-option.js";
 import { renderPaymentSummaryHTML } from "./payment-summary.js";
 export function renderOrderSummaryHTML() {
   let html = ``;
   let quantitySummary = 0;
-  if (cart.length > 0) {
-    cart.forEach((cartItem) => {
+  if (cartClass.cartItems.length > 0) {
+    console.log(cartClass.cartItems);
+    cartClass.cartItems.forEach((cartItem) => {
+      console.log(cartItem);
       const productId = cartItem.productId;
       let cartMatchingItem;
       let deliveryTimeString;
@@ -121,7 +118,7 @@ export function renderOrderSummaryHTML() {
   document.querySelectorAll(".delete-quantity-link").forEach((link) => {
     link.addEventListener("click", () => {
       const deletelinkId = link.dataset;
-      removeFromCart(deletelinkId);
+      cartClass.removeFromCart(deletelinkId);
       renderOrderSummaryHTML();
       renderPaymentSummaryHTML();
     });
@@ -146,11 +143,11 @@ export function renderOrderSummaryHTML() {
       );
       if (newQuantity >= 0 && newQuantity < 1000) {
         updateQuantity = newQuantity;
-        cart.forEach((cartItem) => {
+        cartClass.cartItems.forEach((cartItem) => {
           if (inputValue.inputValue === cartItem.productId) {
             cartItem.quantity += updateQuantity;
           }
-          saveToStorage();
+          cartClass.saveToStorage();
           renderOrderSummaryHTML();
           renderPaymentSummaryHTML();
         });
@@ -177,7 +174,7 @@ export function renderOrderSummaryHTML() {
             if (inputValue.inputValue === cartItem.productId) {
               cartItem.quantity += updateQuantity;
             }
-            saveToStorage();
+            cartClass.saveToStorage();
             renderOrderSummaryHTML();
             renderPaymentSummaryHTML();
           });
@@ -194,7 +191,7 @@ export function renderOrderSummaryHTML() {
     .forEach((element) => {
       element.addEventListener("click", () => {
         const { productId, deliveryOptionId } = element.dataset;
-        updateDeliveryOption(productId, deliveryOptionId);
+        cartClass.updateDeliveryOption(productId, deliveryOptionId);
         renderOrderSummaryHTML();
         renderPaymentSummaryHTML();
       });

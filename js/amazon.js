@@ -1,4 +1,4 @@
-import { addToCart, cartQuantity } from "./cart.js";
+import { cartClass } from "./cart-class.js";
 import { products } from "../data/products.js";
 
 let html = ``;
@@ -61,7 +61,7 @@ function generateHTML() {
   });
 
   document.querySelector(".products-grid").innerHTML = html;
-  document.querySelector(".cart-quantity").innerHTML = cartQuantity;
+  document.querySelector(".cart-quantity").innerHTML = cartClass.cartQuantity;
 }
 const addedMessageTimeouts = {};
 function addAddClass(productId) {
@@ -81,6 +81,6 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
   button.addEventListener("click", () => {
     const { productId } = button.dataset;
     addAddClass(productId);
-    addToCart(productId);
+    cartClass.addToCart(productId);
   });
 });

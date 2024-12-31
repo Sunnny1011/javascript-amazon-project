@@ -1,5 +1,5 @@
 import { validDeliveryOption } from "./delivery-option.js";
-class Cart {
+export class Cart {
   cartItems;
   #localStorageCartKey;
   #localStorageQuantityKey;
@@ -33,10 +33,10 @@ class Cart {
       addTotalQuantity += cartItem.quantity;
     });
     localStorage.setItem(
-      this.localStorageCartKey,
+      this.#localStorageCartKey,
       JSON.stringify(this.cartItems)
     );
-    localStorage.setItem(this.localStorageQuantityKey, addTotalQuantity);
+    localStorage.setItem(this.#localStorageQuantityKey, addTotalQuantity);
     return addTotalQuantity;
   }
   addToCart(productId) {
@@ -109,9 +109,9 @@ class Cart {
   }
 }
 
-const cart = new Cart("cart-class", "cart-quantity-class");
+export const cartClass = new Cart("cart-class", "cart-quantity-class");
 
-const businessCart = new Cart(
-  "cart-business-class",
-  "cart-business-quantity-class"
-);
+// const businessCart = new Cart(
+//   "cart-business-class",
+//   "cart-business-quantity-class"
+// );
