@@ -18,13 +18,14 @@ export function renderPaymentSummaryHTML() {
       if (productItem.id === cartItem.productId) {
         cartMatchingItem = productItem;
         quantity += cartItem.quantity;
-        orderPrice += calculatePrice(cartMatchingItem) * cartItem.quantity;
+        orderPrice +=
+          calculatePrice(cartMatchingItem.priceCents) * cartItem.quantity;
       }
     });
     deliveryOption.forEach((deliveryItem) => {
       if (deliveryItem.deliveryOptionId === cartItem.deliveryOptionId) {
         deliveryOptionItem = deliveryItem;
-        shippingHandling += calculatePrice(deliveryOptionItem);
+        shippingHandling += calculatePrice(deliveryOptionItem.priceCents);
       }
     });
 

@@ -43,7 +43,7 @@ export function renderOrderSummaryHTML() {
                     ${cartMatchingItem.name}
                   </div>
                   <div class="product-price">$${calculatePrice(
-                    cartMatchingItem
+                    cartMatchingItem.priceCents
                   )}</div>
                   <div class="product-quantity">
                     <span> Quantity: <span class="quantity-label">${
@@ -89,7 +89,9 @@ export function renderOrderSummaryHTML() {
         optionItem.deliveryOptionId === Number(cartItem.deliveryOptionId);
       const deliveryTimeString = calculateDeliveryDate(optionItem);
       const deliveryPriceString =
-        optionItem.priceCents === 0 ? "Free" : calculatePrice(optionItem);
+        optionItem.priceCents === 0
+          ? "Free"
+          : calculatePrice(optionItem.priceCents);
       html += `<div class="delivery-option delivery-option-${
         cartMatchingItem.id
       }-${optionItem.deliveryOptionId}">
