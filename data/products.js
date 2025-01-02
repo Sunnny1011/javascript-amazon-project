@@ -52,7 +52,6 @@ export class Appliance extends Products {
 export let products = [];
 
 export function loadProducts(paraFun) {
-  console.log(paraFun);
   const xhr = new XMLHttpRequest();
   xhr.addEventListener("load", () => {
     products = JSON.parse(xhr.response).map((productDetails) => {
@@ -60,16 +59,15 @@ export function loadProducts(paraFun) {
         return new Clothing(productDetails);
       }
       if (productDetails.keywords) {
-        const hasappliances = productDetails.keywords.includes("appliances");
+        const hasAppliances = productDetails.keywords.includes("appliances");
 
-        if (hasappliances) {
+        if (hasAppliances) {
           return new Appliance(productDetails);
         }
       }
       return new Products(productDetails);
     });
     paraFun();
-    console.log("+++++++++++", products);
   });
 
   xhr.open("GET", "https://supersimplebackend.dev/products");
