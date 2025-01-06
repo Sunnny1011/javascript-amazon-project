@@ -7,9 +7,7 @@ export function renderOrderSummaryHTML() {
   let html = ``;
   let quantitySummary = 0;
   if (cartClass.cartItems.length > 0) {
-    console.log(cartClass.cartItems);
     cartClass.cartItems.forEach((cartItem) => {
-      console.log(cartItem);
       const productId = cartItem.productId;
       let cartMatchingItem;
       let deliveryTimeString;

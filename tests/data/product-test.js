@@ -1,5 +1,4 @@
-import { calculatePrice } from "../../utils/util.js";
-import { Products, products, Clothing } from "../../data/products.js";
+import { Products } from "../../data/products.js";
 describe("test classes", () => {
   let product;
   beforeEach(() => {

@@ -51,28 +51,51 @@ export class Appliance extends Products {
 }
 export let products = [];
 
-export function loadProducts(paraFun) {
-  const xhr = new XMLHttpRequest();
-  xhr.addEventListener("load", () => {
-    products = JSON.parse(xhr.response).map((productDetails) => {
-      if (productDetails.type === "clothing") {
-        return new Clothing(productDetails);
-      }
-      if (productDetails.keywords) {
-        const hasAppliances = productDetails.keywords.includes("appliances");
-
-        if (hasAppliances) {
-          return new Appliance(productDetails);
+export function loadProductFetch() {
+  const promise1 = fetch("https://supersimplebackend.dev/products")
+    .then((response) => {
+      return response.json();
+    })
+    .then((productData) => {
+      products = productData.map((productDetails) => {
+        if (productDetails.type === "clothing") {
+          return new Clothing(productDetails);
         }
-      }
-      return new Products(productDetails);
-    });
-    paraFun();
-  });
+        if (productDetails.keywords) {
+          const hasAppliances = productDetails.keywords.includes("appliances");
 
-  xhr.open("GET", "https://supersimplebackend.dev/products");
-  xhr.send();
+          if (hasAppliances) {
+            return new Appliance(productDetails);
+          }
+        }
+        return new Products(productDetails);
+      });
+    });
+  return promise1;
 }
+
+// export function loadProducts(paraFun) {
+//   const xhr = new XMLHttpRequest();
+//   xhr.addEventListener("load", () => {
+//     products = JSON.parse(xhr.response).map((productDetails) => {
+//       if (productDetails.type === "clothing") {
+//         return new Clothing(productDetails);
+//       }
+//       if (productDetails.keywords) {
+//         const hasAppliances = productDetails.keywords.includes("appliances");
+
+//         if (hasAppliances) {
+//           return new Appliance(productDetails);
+//         }
+//       }
+//       return new Products(productDetails);
+//     });
+//     paraFun();
+//   });
+
+//   xhr.open("GET", "https://supersimplebackend.dev/products");
+//   xhr.send();
+// }
 
 // const obj1 = {
 //   id: 1,

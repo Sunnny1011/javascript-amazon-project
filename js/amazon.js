@@ -1,8 +1,10 @@
 import { cartClass } from "./cart-class.js";
-import { products, loadProducts } from "../data/products.js";
+import { products, loadProductFetch } from "../data/products.js";
 
-loadProducts(loadHomepage);
-
+// loadProducts(loadHomepage);
+loadProductFetch().then(() => {
+  loadHomepage();
+});
 function loadHomepage() {
   let html = "";
   products.forEach((item) => {
